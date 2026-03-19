@@ -1,4 +1,7 @@
 # Especificação técnica (spec_tech.md) - Júllia e Marcos
+
+**Documentação relacionada:** [`prd.md`](prd.md) · [`spec_ui.md`](spec_ui.md) · [`revisao_refinamento.md`](revisao_refinamento.md).
+
 ## Visão Geral Técnica
 Este documento define a arquitetura e as diretrizes técnicas para o desenvolvimento de um Agente de IA Generativa especializado em SEO para o mercado imobiliário.
 
@@ -24,7 +27,7 @@ Uso de event-driven architecture para processamento assíncrono de geração de 
 Camada de AI orchestration (LLM pipeline) desacoplada
 ## Componentes principais
 
-### Frontend (Portal do Especialista SEO)
+###s Frontend (Portal do Especialista SEO)
 Interface para criação de briefs
 Gestão de conteúdos gerados
 Aprovação/edição humana
@@ -206,22 +209,16 @@ CREATE POLICY tenant_isolation_write ON contents
 - **Tabelas com RLS:** contents, projects, briefs, users, audit_logs
 - **Bypass para admin:** role `superadmin` com `BYPASSRLS`
 
+---
 
+## Diretrizes para desenvolvimento assistido por IA
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+1. **Ordem de leitura:** `prd.md` (o quê/por quê) → este documento (como) → `spec_ui.md` (telas e fluxos). Em dúvida de escopo, respeitar a tabela **“Mapeamento RFN × versão”** do PRD.  
+2. **Serviços:** gerar código por **fronteira de serviço** (BFF, Content Generation, worker de fila, camada LLM), evitando monólito acoplado ao provedor de modelo.  
+3. **Multi-tenant:** toda query e todo DTO persistido deve carregar ou filtrar por `tenant_id`; não expor IDs internos de outros tenants em respostas ou logs.  
+4. **LLM:** isolar prompts e templates em módulo versionável; validar e sanitizar entradas do usuário (**prompt injection**); nunca logar segredos nem prompts com PII sem mascaramento.  
+5. **APIs:** manter versionamento por prefixo `/v1/`; erros no formato consistente (código, mensagem, detalhes opcionais); paginação em listagens.  
+6. **UI:** respeitar identificadores **INT-xx** do `spec_ui.md` ao nomear rotas, testes E2E e componentes de página.  
+7. **Mudanças estruturais:** alterações de stack ou de nuvem exigem atualização **neste arquivo** e menção na próxima revisão de refinamento.
 
 
