@@ -1,5 +1,7 @@
 # Definição de Requisitos do Produto (PRD)
 
+**Documentação relacionada:** [`spec_tech.md`](spec_tech.md) · [`spec_ui.md`](spec_ui.md) · [`revisao_refinamento.md`](revisao_refinamento.md) (revisão cruzada e changelog).
+
 ## Descrição do produto
 
 **Problema**  
@@ -79,6 +81,23 @@ Para o **Especialista em Escrita de Conteúdo SEO**, a solução elimina tarefas
 - **Frustrações:**
   - ROI baixo em estratégias de conteúdo
   - Dependência de fornecedores externos
+
+- **Permissões sugeridas (evolução do produto):** perfil pode ser configurado para **leitura e aprovação** de conteúdos (sem edição completa), alinhado ao RBAC descrito na especificação técnica — útil para governança entre SEO e marketing.
+
+---
+
+## Mapeamento RFN × versão
+
+Referência para evitar escopo inchado no MVP: funcionalidades listadas abaixo como **RFN** podem ter entrega faseada.
+
+| RFN | v1 (MVP) | v2 | v3 |
+|-----|----------|-----|-----|
+| RFN-01 Geração automática | Sim | Sim | Sim |
+| RFN-02 Dados locais | Conteúdo pode mencionar região a partir do briefing; **sem** integração automática a bases externas obrigatória | Integração/enriquecimento local | Refinamento contínuo |
+| RFN-03 Estrutura SEO | Sim | Sim | Sim |
+| RFN-04 Lote | **Não** | Sim | Sim |
+| RFN-05 Editor assistido | Sim | Sim | Sim |
+| RFN-06 Export / integração | **Markdown** (obrigatório); HTML/API conforme capacidade do time no MVP | CMS, export HTML/JSON ampliados, integrações | Conforme roadmap estendido |
 
 ---
 

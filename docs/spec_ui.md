@@ -2,6 +2,8 @@
 
 Documento de interface para o **Agente de IA Generativa especializado em SEO Imobiliário** (portal do Especialista em Conteúdo SEO e Gestor de Marketing), alinhado ao `prd.md` e à visão de frontend da `spec_tech.md` (Next.js, desktop-first com layout responsivo).
 
+**Revisão:** alterações de alinhamento com o PRD e a spec técnica estão registradas em [`revisao_refinamento.md`](revisao_refinamento.md).
+
 ---
 
 ## Interfaces gráficas
@@ -20,9 +22,9 @@ Documento de interface para o **Agente de IA Generativa especializado em SEO Imo
 
 - **Tipo:** página com cards e atalhos
 - **Campos:** (opcional) seletor de projeto/tenant no topo
-- **Botões:** Novo briefing, Nova geração em lote, Ver todos os conteúdos
+- **Botões:** Novo briefing, Ver todos os conteúdos; **Nova geração em lote (v2)** — exibir somente após release da funcionalidade ou como item desabilitado com tooltip “Disponível na v2” no MVP
 - **Links:** Projetos, Conteúdos recentes, Configurações, Documentação da API (conforme perfil)
-- **Considerações:** Cards com métricas resumidas (conteúdos gerados no período, jobs em fila, último erro de geração); atalhos diferenciados para Especialista SEO vs. Gestor (somente leitura ou aprovações, se aplicável)
+- **Considerações:** Cards com métricas resumidas (conteúdos gerados no período; **jobs em fila** principalmente a partir da v2 quando houver lote); último erro de geração; atalhos diferenciados para Especialista SEO vs. Gestor (somente leitura ou aprovações, conforme PRD)
 
 ---
 
@@ -120,7 +122,7 @@ Documento de interface para o **Agente de IA Generativa especializado em SEO Imo
 
 1. **Login (INT-01)** → **Dashboard (INT-02)**  
 2. **Dashboard** → **Projetos (INT-03)** → **Projeto (INT-04)** → **Novo briefing (INT-05)** → **Geração** → **Editor (INT-06)** com **Painel SEO (INT-07)** acessível a qualquer momento  
-3. **Dashboard** ou **Projeto** → **Geração em lote (INT-08)** → linhas concluídas abrem **Editor (INT-06)** ou export direto via **INT-10**  
+3. **(v2)** **Dashboard** ou **Projeto** → **Geração em lote (INT-08)** → linhas concluídas abrem **Editor (INT-06)** ou export direto via **INT-10**  
 4. **Biblioteca (INT-09)** acessível pelo menu global; qualquer item leva ao **Editor (INT-06)**  
 5. **Exportação (INT-10)** a partir do editor, da biblioteca (massa) ou do resumo de lote (INT-08)  
 6. **Configurações (INT-11)** sempre disponíveis no menu do usuário (avatar)  
@@ -134,7 +136,7 @@ Documento de interface para o **Agente de IA Generativa especializado em SEO Imo
 ## Diretrizes para IA
 
 - **Fonte de verdade:** priorizar este documento em conjunto com `prd.md` para decisões de UI; em conflito de detalhe, seguir critérios de aceitação do PRD.  
-- **Escopo por versão:** no **MVP**, implementar prioritariamente INT-01, INT-02, INT-03, INT-04, INT-05, INT-06, INT-07, INT-09, INT-10 (export Markdown); INT-08 (lote) e integrações CMS avançadas podem seguir o escopo v2 do PRD.  
+- **Escopo por versão:** no **MVP**, implementar prioritariamente INT-01, INT-02, INT-03, INT-04, INT-05, INT-06, INT-07, INT-09, INT-10 (export Markdown). **INT-08 (lote)** e CTAs de lote no dashboard são **v2** (vide tabela “Mapeamento RFN × versão” no `prd.md`). Integrações CMS avançadas seguem v2+ do PRD.  
 - **Consistência:** reutilizar padrões de formulário, tabela e modais; não inventar novos fluxos de negócio sem atualizar o PRD.  
 - **Acessibilidade:** foco visível, labels em todos os campos, contraste adequado, mensagens de erro associadas aos campos; teclado no editor quando possível.  
 - **Prototipagem:** ao gerar telas em ferramentas (ex.: Stitch), manter nomenclatura **INT-xx** nos títulos dos frames para rastreabilidade com este documento.  
