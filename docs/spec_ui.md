@@ -19,10 +19,10 @@ Documento de interface para o **Agente de IA Generativa especializado em SEO Imo
 ### INT-02 - Dashboard (visão geral)
 
 - **Tipo:** página com cards e atalhos
-- **Campos:** (opcional) seletor de projeto/tenant no topo
+- **Campos:** seletor de workspace/tenant no topo (dropdown com nome do tenant atual + opção "Trocar workspace" se usuário pertence a múltiplos tenants)
 - **Botões:** Novo briefing, Nova geração em lote, Ver todos os conteúdos
 - **Links:** Projetos, Conteúdos recentes, Configurações, Documentação da API (conforme perfil)
-- **Considerações:** Cards com métricas resumidas (conteúdos gerados no período, jobs em fila, último erro de geração); atalhos diferenciados para Especialista SEO vs. Gestor (somente leitura ou aprovações, se aplicável)
+- **Considerações:** Cards com métricas resumidas (conteúdos gerados no período, jobs em fila, último erro de geração); atalhos diferenciados para Especialista SEO vs. Gestor (somente leitura ou aprovações, se aplicável); **seleção de tenant:** ao trocar workspace, recarregar dashboard com dados do novo tenant (tenant_id atualizado no contexto da sessão)
 
 ---
 
@@ -52,7 +52,13 @@ Documento de interface para o **Agente de IA Generativa especializado em SEO Imo
 - **Campos:** cidade, bairro, tipo de imóvel, características da região (textarea ou tags), palavras-chave alvo (primária + secundárias), tipo de página (bairro, condomínio, tipologia), opções de tom/comprimento (se MVP permitir)
 - **Botões:** Gerar conteúdo, Salvar rascunho, Cancelar
 - **Links:** Ajuda contextual (?): o que é briefing, boas práticas de keyword
-- **Considerações:** Feedback de carregamento durante geração (alvo PRD: até ~30 s); preview de parâmetros antes de disparar; validação obrigatória de campos mínimos para RFN-01
+- **Considerações:** Feedback de carregamento durante geração (alvo PRD: até ~30 s):
+  - **0-5s:** Spinner com mensagem "Preparando geração..."
+  - **5-15s:** Progress bar indeterminado + "Gerando conteúdo com IA..."
+  - **15-25s:** Progress bar com etapas ("Otimizando SEO...", "Gerando FAQs...")
+  - **25-30s:** Mensagem "Finalizando..." com skeleton do conteúdo
+  - **>30s:** Opção de cancelar + notificação quando pronto
+  Preview de parâmetros antes de disparar; validação obrigatória de campos mínimos para RFN-01
 
 ---
 
@@ -60,7 +66,7 @@ Documento de interface para o **Agente de IA Generativa especializado em SEO Imo
 
 - **Tipo:** página com layout dividido: editor principal + painel lateral (SEO / sugestões)
 - **Campos:** corpo do artigo (rich text ou markdown), título SEO, meta description, slug sugerido; painel: lista de sugestões (inline cards), novas keywords sugeridas, alertas (densidade, legibilidade)
-- **Botões:** Salvar, Regenerar seção (se disponível), Aprovar, Exportar, Desfazer/Refazer
+- **Botões:** Salvar, Regenerar seção (**v2** - não incluído no MVP), Aprovar, Exportar, Desfazer/Refazer
 - **Links:** Abrir estrutura de headings (âncoras), Ir para FAQs
 - **Considerações:** Atende RFN-05: edição livre + sugestões automáticas; indicar trechos afetados por sugestão; estado “gerando sugestões…” não bloquear edição quando possível
 
@@ -80,6 +86,19 @@ Documento de interface para o **Agente de IA Generativa especializado em SEO Imo
 
 - **Tipo:** página com upload + tabela de jobs
 - **Campos:** upload de arquivo (CSV/planilha) com colunas mapeáveis (bairro, cidade, tipo, etc.); mapeamento coluna → campo; opções de template de briefing
+
+**Template CSV esperado (colunas obrigatórias*):**
+| Coluna | Tipo | Obrigatório | Exemplo |
+|--------|------|-------------|----------|
+| cidade* | string | Sim | "São Paulo" |
+| bairro* | string | Sim | "Pinheiros" |
+| tipo_imovel* | string | Sim | "apartamento" |
+| keyword_principal | string | Não | "apartamento pinheiros" |
+| keywords_secundarias | string (separadas por ;) | Não | "morar em pinheiros;imóveis pinheiros" |
+| caracteristicas | string | Não | "próximo ao metrô, área verde" |
+| tom | enum | Não | "formal" ou "informal" |
+
+> **Download do template:** link disponível em INT-08 (botão "Modelo de planilha")
 - **Botões:** Validar arquivo, Iniciar lote, Pausar/Retomar (se suportado), Baixar relatório de erros, Exportar resultados
 - **Links:** Modelo de planilha (download), Ver detalhe do job
 - **Considerações:** Barra de progresso e estimativa; fila visível (RFN-04); falhas por linha com motivo legível; exportação zip/CSV dos conteúdos (alinhado a RFN-06)
@@ -136,6 +155,6 @@ Documento de interface para o **Agente de IA Generativa especializado em SEO Imo
 - **Fonte de verdade:** priorizar este documento em conjunto com `prd.md` para decisões de UI; em conflito de detalhe, seguir critérios de aceitação do PRD.  
 - **Escopo por versão:** no **MVP**, implementar prioritariamente INT-01, INT-02, INT-03, INT-04, INT-05, INT-06, INT-07, INT-09, INT-10 (export Markdown); INT-08 (lote) e integrações CMS avançadas podem seguir o escopo v2 do PRD.  
 - **Consistência:** reutilizar padrões de formulário, tabela e modais; não inventar novos fluxos de negócio sem atualizar o PRD.  
-- **Acessibilidade:** foco visível, labels em todos os campos, contraste adequado, mensagens de erro associadas aos campos; teclado no editor quando possível.  
+- **Acessibilidade:** conformidade com **WCAG 2.1 nível AA**; foco visível, labels em todos os campos, contraste adequado (mínimo 4.5:1 para texto normal), mensagens de erro associadas aos campos (aria-describedby); teclado no editor quando possível; suporte a screen readers (ARIA labels).  
 - **Prototipagem:** ao gerar telas em ferramentas (ex.: Stitch), manter nomenclatura **INT-xx** nos títulos dos frames para rastreabilidade com este documento.  
 - **Código (Next.js):** preferir composição de layout (app router), componentes de design system quando existirem (`design_system.md` na fase 1.3 do roteiro); não acoplar strings de UI a lógica de negócio sem i18n se o produto for multilíngue.
